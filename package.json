@@ -1,0 +1,9 @@
+{
+  "name": "coc-project",
+  "private": true,
+  "scripts": {
+    "lint": "eslint .",
+    "test": "echo \"No tests yet\"",
+    "build": "npm --prefix frontend run build"
+  }
+}
