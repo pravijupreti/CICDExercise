@@ -5,5 +5,8 @@
     "lint": "eslint .",
     "test": "echo \"No tests yet\"",
     "build": "npm --prefix frontend run build"
+  },
+  "devDependencies": {
+    "eslint": "^10.1.0"
   }
 }
