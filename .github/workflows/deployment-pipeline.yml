@@ -24,10 +24,10 @@ jobs:
           node-version: '20'
           cache: 'npm'
 
-      - name: Install dependencies
-        run: npm ci  # ONE install for ALL workspaces
+      - name: Install frontend dependencies
+        run: cd frontend && npm ci
 
-      - name: Lint
+      - name: Lint backend
         run: npm run lint
 
       - name: Test
@@ -44,7 +44,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Only needed here for tagging
+          fetch-depth: 0
 
       - name: Bump version and push tag
         id: bump_version
@@ -53,37 +53,3 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BUMP: patch
           WITH_V: true
-
-  notify_success:
-    needs: tag_release
-    runs-on: ubuntu-latest
-    if: success()
-
-    steps:
-      - name: Discord notification (success)
-        uses: sebastianpopp/discord-action@releases/v2
-        with:
-          webhook: ${{ secrets.DISCORD_WEBHOOK_URL }}
-          message: |
-            🚀 Deployment successful
-            Repository: ${{ github.repository }}
-            Commit: ${{ github.sha }}
-            Author: ${{ github.actor }}
-            Branch: ${{ github.ref_name }}
-
-  notify_failure:
-    needs: build_and_test
-    runs-on: ubuntu-latest
-    if: failure()
-
-    steps:
-      - name: Discord notification (failure)
-        uses: sebastianpopp/discord-action@releases/v2
-        with:
-          webhook: ${{ secrets.DISCORD_WEBHOOK_URL }}
-          message: |
-            ❌ Build failed
-            Repository: ${{ github.repository }}
-            Commit: ${{ github.sha }}
-            Author: ${{ github.actor }}
-            Branch: ${{ github.ref_name }}
