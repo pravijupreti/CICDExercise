@@ -18,6 +18,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          submodules: recursive  # Add this to properly handle submodules
 
       - uses: actions/setup-node@v4
         with:
@@ -26,6 +28,9 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Install frontend dependencies
+        run: npm --prefix frontend ci  # Add this for frontend package
 
       - name: Lint
         run: npm run lint
@@ -45,6 +50,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          submodules: recursive  # Add this for consistency
 
       - name: Bump version and push tag
         id: bump_version
